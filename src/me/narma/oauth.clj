@@ -3,7 +3,8 @@
             [clojure.edn]
             [clojure.java.io :as io]
             [compojure.core :as cmpj]
-            ))
+            )
+  (:use [clojure.tools.logging :only (info error)]))
 
 (defmacro unless [condition & body]
   `(when (not ~condition)
@@ -21,7 +22,9 @@
 (def tokens (atom {}))
 
 (defn get-request-token []
-  (oauth/request-token consumer "https://narma.me/knock"))
+  (let [token (oauth/request-token consumer "https://narma.me/knock")]
+    (info "requested token is " token)
+  token))
 
 (defn get-twitter-url [request-token]    
   (swap! tokens assoc (:oauth_token request-token) request-token)
@@ -35,6 +38,10 @@
         access-token (oauth/access-token consumer
                                          request-token
                                          verify)]
+    (info "token response is" token)
+    (info "verify is " verify)
+    (info "str token is " request-token)
+    (info "access-token is " access-token)
     (do
       (swap! tokens dissoc request-token))
     access-token))

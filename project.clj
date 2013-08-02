@@ -7,11 +7,11 @@
                  [compojure "1.1.5"]
                  [ring/ring-core "1.2.0"]
                  [http-kit "2.1.8"]
-                 ;; oauth
                  [clj-oauth "1.4.1-SNAPSHOT"]
                  
-                 [bultitude "0.2.2"]
-                 ;; Dommy
+                 [bultitude "0.2.2"] ;; namespace resolution
+                 [org.clojure/tools.logging "0.2.6"] ;; logging!
+                 [clj-logging-config "1.9.10"]
                  ]
   :profiles {:dev {:dependencies [[ring/ring-devel "1.2.0"]]}}
   :jvm-opts    ["-Dfile.encoding=UTF-8"]
