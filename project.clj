@@ -15,8 +15,9 @@
                  ]
   :profiles {:dev {:dependencies [[ring/ring-devel "1.2.0"]]}}
   :jvm-opts    ["-Dfile.encoding=UTF-8"]
-  :global-vars {*warn-on-reflection* true
+  :global-vars {*warn-on-reflection* false
                 *assert* false}
+  :aliases {"reflect" ["update-in" ":global-vars" "assoc" "*warn-on-reflection*" "true" "--" "compile"]}
   :uberjar-name "narmame-standalone.jar"
   :main me.narma.server
   :aot [me.narma.server])

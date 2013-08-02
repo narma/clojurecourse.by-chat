@@ -11,6 +11,7 @@
   "First page"
   []
   "Hello world!")
+
 (defn twitter [] 
   redirect (auth/get-twitter-url (auth/get-request-token)))
 
