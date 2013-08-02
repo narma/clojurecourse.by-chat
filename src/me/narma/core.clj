@@ -13,11 +13,11 @@
   "Hello world!")
 
 (defn twitter [] 
-  redirect (auth/get-twitter-url (auth/get-request-token)))
+  (-> (auth/get-request-token) auth/get-twitter-url redirect))
 
 (defroutes app-routes
   (GET "/" [] (index))
-  (GET "/twtter" [] (twitter))
+  (GET "/twitter" [] (twitter))
   (GET "/knock" [oauth_token oauth_verifier] (str (auth/get-access-token-twitter oauth_token oauth_verifier)))
   ;;(GET "/save" [] handler)     ;; websocket
   (route/not-found "<p>Page not found.</p>")) ;; all other, return 404
