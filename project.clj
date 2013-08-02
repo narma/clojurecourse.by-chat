@@ -15,5 +15,6 @@
   :jvm-opts    ["-Dfile.encoding=UTF-8"]
   :global-vars {*warn-on-reflection* true
                 *assert* false}
+  :uberjar-name "narmame-standalone.jar"
   :main me.narma.main
   :aot [me.narma.main])
