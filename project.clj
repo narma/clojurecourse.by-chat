@@ -9,6 +9,8 @@
                  [http-kit "2.1.8"]
                  ;; oauth
                  [clj-oauth "1.4.1-SNAPSHOT"]
+                 
+                 [bultitude "0.2.2"]
                  ;; Dommy
                  ]
   :profiles {:dev {:dependencies [[ring/ring-devel "1.2.0"]]}}
@@ -16,5 +18,5 @@
   :global-vars {*warn-on-reflection* true
                 *assert* false}
   :uberjar-name "narmame-standalone.jar"
-  :main me.narma.main
-  :aot [me.narma.main])
+  :main me.narma.server
+  :aot [me.narma.server])
