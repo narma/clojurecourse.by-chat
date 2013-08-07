@@ -1,27 +1,18 @@
 (ns me.narma.core
   (:use 
     compojure.core
-    [ring.util.response :only [redirect]]
-    clojure.tools.logging
-    clj-logging-config.log4j)
+    [ring.util.response :only [redirect]])
   (:require 
     [compojure.handler :as handler]
     [compojure.route :as route]
-    [me.narma.oauth :as auth]))
-
-(set-logger! :level :info
-  :out (org.apache.log4j.DailyRollingFileAppender. 
-         (org.apache.log4j.PatternLayout. "%d{ISO8601} [%t] %-5p - %m%n") 
-         "/var/log/narmame.log" "'.'yyyy-MM-dd")
-  :file "/var/log/narmame.log"
-  :pattern "%d{ISO8601} [%t] %-5p - %m%n"
-  )
+    [me.narma.oauth :as auth]
+    [me.narma.log :as log]))
 
 (defn index
   "First page"
   []
-  (info "hello")
-  "Hello world!")
+  (log/info "index page")
+  "Hello")
 
 (defn twitter [] 
   (-> (auth/get-request-token) auth/get-twitter-url redirect))

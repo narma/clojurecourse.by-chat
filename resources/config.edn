@@ -1,0 +1,10 @@
+{:nomad/environments
+    {:default
+        {:wrap-reload true
+          :wrap-error-handler true
+        }
+     "prod"
+        {:wrap-reload false
+          :wrap-error-handler true
+        }
+}}

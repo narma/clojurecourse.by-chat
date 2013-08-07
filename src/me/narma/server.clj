@@ -1,16 +1,25 @@
 (ns me.narma.server
-  (:use [org.httpkit.server :only [run-server]]        
+  (:use [org.httpkit.server :only [run-server]]
         me.narma.core
-        bultitude.core)
+        [clojure.java.io :as io]
+        nomad
+        ring.middleware.stacktrace)
   (:gen-class))
 
+(def cfg (nomad/defconfig my-config (io/resource "config.edn")))
 
 (defn wrap-reload-if-available [handler]
-  (if (some #{'ring.middleware.reload} (namespaces-on-classpath))
-    (do       
+  (if (:wrap-reload (cfg))
+    (do 
       (use 'ring.middleware.reload)
       ((resolve 'wrap-reload) handler))
-    handler))
+  handler))
+; (defn wrap-reload-if-available [handler]
+;   (if (some #{'ring.middleware.reload} (namespaces-on-classpath))
+;     (do       
+;       (use 'ring.middleware.reload)
+;       ((resolve 'wrap-reload) handler))
+;     handler))
 
 (defn get-handler []
   ;we call (var app) so that when we reload our code, 
