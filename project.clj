@@ -10,7 +10,9 @@
                  [ring/ring-core "1.2.0"]
                  [ring/ring-devel "1.2.0"]
                  [http-kit "2.1.8"]
-                 [clj-oauth "1.4.1-SNAPSHOT"]
+                 
+                 [mavericklou/oauth-clj "0.1.4.1"]
+                 ;[clj-oauth "1.4.1-SNAPSHOT"]
                  
                  [jarohen/nomad "0.5.0"] ;; cfg
 

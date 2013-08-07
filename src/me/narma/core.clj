@@ -5,7 +5,7 @@
   (:require 
     [compojure.handler :as handler]
     [compojure.route :as route]
-    [me.narma.oauth :as auth]
+    [me.narma.auth :as auth]
     [me.narma.log :as log]))
 
 (defn index

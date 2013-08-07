@@ -5,7 +5,7 @@
 (defn set-log-level!
   "Pass keyword :error :info :debug"
   [level]
-  (let [logger (logimpl/get-logger log/*logger-factory* "clojure-example-logback-integration")]
+  (let [logger (logimpl/get-logger log/*logger-factory* "me.narma")]
     (case level
       :debug (.setLevel logger ch.qos.logback.classic.Level/DEBUG)
       :info (.setLevel logger ch.qos.logback.classic.Level/INFO)
