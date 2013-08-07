@@ -33,15 +33,17 @@
   
   
 (defn get-access-token-twitter [request-token verify]
-  (let [token (get @tokens request-token)
-        access-token (oauth/access-token consumer
+  (let [token (get @tokens request-token)]
+    (do 
+    (log/info "str token is " request-token)
+    (log/info "verify is " verify)
+    (log/info "token response is" token)
+    )
+  (let [access-token (oauth/access-token consumer
                                          request-token
                                          verify)]
-    (log/info "token response is" token)
-    (log/info "verify is " verify)
-    (log/info "str token is " request-token)
     (log/info "access-token is " access-token)
     (do
       (swap! tokens dissoc request-token))
-    access-token))
+    access-token)))
 
