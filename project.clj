@@ -17,6 +17,7 @@
                  ;; logging
                  [org.clojure/tools.logging "0.2.6"]
                  [ch.qos.logback/logback-classic "1.0.13"]
+                 [org.codehaus.janino/janino "2.6.1"]
                  ]
   ; :profiles {:dev {:dependencies [[]]}
   ;            }

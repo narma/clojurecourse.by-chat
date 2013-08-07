@@ -14,11 +14,15 @@
   (log/info "index page")
   "Hello")
 
+(defn error-debug []
+  (str (/ 1 0)))
+
 (defn twitter [] 
   (-> (auth/get-request-token) auth/get-twitter-url redirect))
 
 (defroutes app-routes
   (GET "/" [] (index))
+  (GET "/debug" [] (error-debug))
   (GET "/twitter" [] (twitter))
   (GET "/knock" [oauth_token oauth_verifier] (str (auth/get-access-token-twitter oauth_token oauth_verifier)))
   ;;(GET "/save" [] handler)     ;; websocket
