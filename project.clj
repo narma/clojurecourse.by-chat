@@ -23,7 +23,7 @@
                  ]
   ; :profiles {:dev {:dependencies [[]]}
   ;            }
-  :jvm-opts    ["-Dfile.encoding=UTF-8"]
+  :jvm-opts    ["-Dfile.encoding=UTF-8 -Djava.awt.headless=true"]
   :global-vars {*warn-on-reflection* false
                 *assert* false}
   :aliases {"reflect" ["update-in" ":global-vars" "assoc" "*warn-on-reflection*" "true" "--" "compile"]}
