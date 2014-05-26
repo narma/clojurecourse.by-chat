@@ -1,31 +1,36 @@
 (ns me.narma.core
-  (:use 
+  (:use
     compojure.core
     [ring.util.response :only [redirect]])
-  (:require 
+  (:require
     [compojure.handler :as handler]
+    [taoensso.carmine.ring :refer [carmine-store]]
     [compojure.route :as route]
-    [me.narma.auth :as auth]
-    [me.narma.log :as log]))
+    ;[bidi :refer [make-handler]]
+
+    [me.narma.auth.twitter :as auth]))
 
 (defn index
   "First page"
   []
-  (log/info "index page")
   "Hello")
 
 (defn error-debug []
   (str (/ 1 0)))
 
-(defn twitter [] 
-  (-> (auth/get-request-token) auth/get-twitter-url redirect))
+
 
 (defroutes app-routes
   (GET "/" [] (index))
   (GET "/debug" [] (error-debug))
-  (GET "/twitter" [] (twitter))
-  (GET "/knock" [oauth_token oauth_verifier] (str (auth/get-access-token-twitter oauth_token oauth_verifier)))
+  (GET "/login/twitter" [] (redirect (auth/twitter)))
+  (GET "/knock/twitter" [oauth_token oauth_verifier]
+       (auth/twitter-knock oauth_token oauth_verifier))
   ;;(GET "/save" [] handler)     ;; websocket
   (route/not-found "<p>Page not found.</p>")) ;; all other, return 404
 
-(def app (handler/site app-routes))
+(defonce session-store (carmine-store {:expiration-secs (* 60 60 24 7)}))
+
+(def app (-> app-routes
+             handler/site
+             ))

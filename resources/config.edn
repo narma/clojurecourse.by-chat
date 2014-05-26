@@ -1,6 +1,6 @@
 {:nomad/environments
     {:default
-        {:wrap-reload true
+        {:wrap-reload false
           :wrap-stacktrace-log true
           :wrap-stacktrace-web true
         }
