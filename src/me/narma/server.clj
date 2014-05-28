@@ -18,6 +18,16 @@
       ((resolve 'wrap-reload) handler))
   handler))
 
+(defn log-filepath [& more]
+  (let [log-path (-> (System/getProperty "java.class.path")
+                     (java.io.File.)
+                     (.getAbsoluteFile) ;; running jar file
+                     (.getParentFile)
+                     (.getPath)
+                     (str "/logs"))]
+    (str log-path "/" (apply str (interpose "/" more)))))
+
+
 
 (defn output-stream-via-fn [fun]
   "(output-stream-via-fn %(spit \"/tmp/log.txt\" % :append true)"
@@ -37,10 +47,10 @@
     (do
       (alter-var-root (var *out*)
           (fn [out]
-            (output-stream-via-fn #(spit "logs/out.log" % :append true))))
+            (output-stream-via-fn #(spit (log-filepath "out.log") % :append true))))
       (alter-var-root (var *err*)
           (fn [err]
-            (output-stream-via-fn #(spit "logs/err.log" % :append true))))
+            (output-stream-via-fn #(spit (log-filepath "err.log") % :append true))))
 
       (use 'ring.middleware.stacktrace)
               ((resolve 'wrap-stacktrace-log) handler))
@@ -52,6 +62,8 @@
       (use 'ring.middleware.stacktrace)
       ((resolve 'wrap-stacktrace-web) handler))
   handler))
+
+
 
 (defn get-handler []
   ;we call (var app) so that when we reload our code,
@@ -70,7 +82,7 @@
   (require '[lighttable.nrepl.handler :refer [lighttable-ops]])
 
   (timbre/set-config! [:appenders :spit :enabled?] true)
-  (timbre/set-config! [:shared-appender-config :spit-filename] "logs/narma.me.log")
+  (timbre/set-config! [:shared-appender-config :spit-filename] (log-filepath "narma.me.log"))
 
   (let [port  (if port (Integer/parseInt port) 8090)
         nrepl-server

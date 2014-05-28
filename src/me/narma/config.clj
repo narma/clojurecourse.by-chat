@@ -1,13 +1,16 @@
 (ns me.narma.config
   (:require [clojure.edn]))
 
-(defn- read-config [filename]
+(defn read-config [filename]
   (try (-> filename
            slurp
            clojure.edn/read-string)
     (catch java.io.FileNotFoundException _ {})))
 
-(def twitter (read-config "/etc/apps/narma.me/twitter.edn"))
+(def config (read-config "/etc/apps/narma.me/config.edn"))
+
+(defn get-config [& keys]
+  (get-in config keys))
 
 ; (defn get-config [configs]
 ;   (apply into (map read-config configs)))

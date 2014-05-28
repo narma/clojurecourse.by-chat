@@ -13,7 +13,7 @@
                  [http-kit "2.1.18"]
 
                  [compojure "1.1.8"]
-                 [clojurewerkz/route-one "1.1.0"]
+                 ; [clojurewerkz/route-one "1.1.0"]
 
                  ;; [mavericklou/oauth-clj "0.1.4.1"]
                  ; [clj-oauth "1.5.1"]
