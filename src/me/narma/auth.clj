@@ -5,6 +5,8 @@
             [taoensso.timbre :as timbre :refer (log debug error)]
             [me.narma.auth.twitter :refer [->TwitterBackend]]
             [me.narma.auth.github :refer [->GithubBackend]]
+            [me.narma.auth.facebook :refer [->FacebookBackend]]
+            [me.narma.auth.google :refer [->GoogleBackend]]
             [me.narma.auth.protocols :refer :all]))
 
 (deftype EmptyBackend [request]
@@ -22,6 +24,8 @@
   (case method
     "twitter" (->TwitterBackend request)
     "github" (->GithubBackend request)
+    "facebook" (->FacebookBackend request)
+    "google" (->GoogleBackend request)
     (->EmptyBackend request)))
 
 (defn wrap-user [handler]
