@@ -73,8 +73,7 @@
   (-> (var app)
     wrap-reload-if-enabled
     wrap-stacktrace-log-if-enabled
-    wrap-stacktrace-web-if-enabled
-    ))
+    wrap-stacktrace-web-if-enabled))
 
 
 

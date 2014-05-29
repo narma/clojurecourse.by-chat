@@ -4,6 +4,7 @@
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [taoensso.timbre :as timbre :refer (log debug error)]
             [me.narma.auth.twitter :refer [->TwitterBackend]]
+            [me.narma.auth.github :refer [->GithubBackend]]
             [me.narma.auth.protocols :refer :all]))
 
 (deftype EmptyBackend [request]
@@ -20,6 +21,7 @@
 (defn dispatch-backend [method request]
   (case method
     "twitter" (->TwitterBackend request)
+    "github" (->GithubBackend request)
     (->EmptyBackend request)))
 
 (defn wrap-user [handler]

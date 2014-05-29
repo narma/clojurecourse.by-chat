@@ -32,7 +32,7 @@
 
 (defroutes app-routes
   (GET "/" [] index)
-  (GET "/test" [] {:session {:my-var "hello"}})
+  (GET "/test" req (str "!" (:session req)))
   (GET "/login" req (if (authenticated? req)
        (redirect "/")
        (slurp (io/resource "public/html/login.html"))))

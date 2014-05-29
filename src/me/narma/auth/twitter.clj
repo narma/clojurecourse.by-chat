@@ -27,21 +27,6 @@
          {:status 401
           :body "Not confirmed"})))
 
-  (user-info [_]
-     (let [{{access-token :token} :identity} request
-           client (tw/oauth-client
-                   consumer-key
-                   consumer-secret
-                   (:oauth-token access-token)
-                   (:oauth-token-secret access-token))
-           tw-info (client {:method :get
-                            :url "https://api.twitter.com/1.1/account/verify_credentials.json"})]
-       {:name (:screen-name tw-info)
-        :avatar-url (clojure.string/replace
-                     (:profile-image-url tw-info)
-                     "http://"
-                     "https://")}))
-
   (knock [this]
          (let [{{:keys [oauth_token oauth_verifier]} :params} request]
            (if-not (= oauth_token
@@ -56,4 +41,19 @@
                                oauth_verifier)]
            (-> (redirect "/")
                (assoc-in [:session :identity] {:token access-token :backend "twitter"})
-               (assoc-in [:session :oauth-token] nil)))))))
+               (assoc-in [:session :oauth-token] nil))))))
+
+  (user-info [_]
+     (let [{{access-token :token} :identity} request
+           client (tw/oauth-client
+                   consumer-key
+                   consumer-secret
+                   (:oauth-token access-token)
+                   (:oauth-token-secret access-token))
+           tw-info (client {:method :get
+                            :url "https://api.twitter.com/1.1/account/verify_credentials.json"})]
+       {:name (:screen-name tw-info)
+        :avatar-url (clojure.string/replace
+                     (:profile-image-url tw-info)
+                     "http://"
+                     "https://")})))
