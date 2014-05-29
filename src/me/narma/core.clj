@@ -1,4 +1,5 @@
 (ns me.narma.core
+  (:use ring.util.response)
   (:require [clojure.java.io :as io]
             [compojure.handler :as handler]
             [compojure.route :as route]
@@ -13,7 +14,7 @@
             [buddy.auth.backends.session :refer [session-backend]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [taoensso.carmine.ring :refer [carmine-store]]
-            [me.narma.auth :refer [login-required] :as auth]
+            [me.narma.auth :refer [wrap-user] :as auth]
             [me.narma.auth.protocols :refer :all]))
 
 (def redis-conn {:pool {} :spec {:host "127.0.0.1" :port 6379}})
@@ -21,17 +22,8 @@
 
 ; (wcar* (car/get "carmine:session:60dbe4e8-6791-4ca6-9671-36f19c71965e"))
 
-
-(defn unauthorized-handler
-  [request metadata]
-  (if (authenticated? request)
-    (redirect "/")
-    (redirect "/login")))
-
-
-
 (defn index [request]
-  (str "Hello "
+  (str "Hi "
        (get-in request [:user :name])
        "<br/>"
        (str "<img src=\""
@@ -39,21 +31,47 @@
             "\">")))
 
 (defroutes app-routes
-  (GET "/" [] (login-required index))
+  (GET "/" [] index)
   (GET "/test" [] {:session {:my-var "hello"}})
   (GET "/login" req (if (authenticated? req)
        (redirect "/")
        (slurp (io/resource "public/html/login.html"))))
+  (GET "/logout" [] (-> (redirect "/")
+                        (assoc :session nil)))
   (GET "/login/:method" {{method :method} :route-params :as req}
        (authenticate (auth/dispatch-backend method req)))
   (GET "/knock/:method" {{method :method} :route-params :as req}
        (knock (auth/dispatch-backend method req)))
   (route/not-found "<p>404</p>"))
 
+(defn unauthorized-handler
+  [request metadata]
+  (if (authenticated? request)
+    (redirect "/")
+    (redirect "/login")))
+
 (def backend (session-backend :unauthorized-handler unauthorized-handler))
+
+(def rules [{:pattern #"^/(login|knock|logout).*"
+             :handler (constantly true)}
+            {:pattern #".*"
+             :handler authenticated?}])
+
+(defn reject-handler [request]
+  (if (authenticated? request)
+    {:status 403
+     :headers {}
+     :body "Not authorized"}
+    (redirect "/login")))
+
 (def app (-> app-routes
              (handler/api)
              (wrap-multipart-params)
              (wrap-flash)
+             (wrap-user)
+             (wrap-access-rules :rules rules
+                                :policy :reject
+                                :reject-handler reject-handler)
+             (wrap-authorization backend)
              (wrap-authentication backend) ;; session must be after this
              (wrap-session {:store (carmine-store redis-conn)})))

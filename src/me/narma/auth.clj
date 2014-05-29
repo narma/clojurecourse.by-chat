@@ -22,17 +22,26 @@
     "twitter" (->TwitterBackend request)
     (->EmptyBackend request)))
 
-(defn inject-user-info [request]
-  (if-let [method (get-in request [:identity :backend])]
-    (let [auth-backend (dispatch-backend method request)]
-      (-> request
-          (assoc :oauth-provider auth-backend) ; TODO: necessary?
-          (assoc :user (user-info auth-backend))))
-    request))
-
-(defn login-required [handler]
-  "Login required ring middleware"
+(defn wrap-user [handler]
+  "Wrap user if request is authenticated
+  Insert to request :user info with cache it in session
+  if auth backend doesn't exist do nothing"
+  ; TODO: use statefull session (use sandbar?)
+  ; for avoid complexity of session save/restore
   (fn [request]
     (if-not (authenticated? request)
-      (redirect "/login")
-      (handler (inject-user-info request)))))
+      (handler request)
+      (if-let [user (get-in request [:session :user])]
+        (handler (assoc request :user user))
+        (let [method (get-in request [:session :identity :backend])
+              auth-backend (dispatch-backend method request)
+              user (user-info auth-backend)]
+          (let [resp (handler (assoc request :user user))]
+            (if (:session resp)  ;; user code in handler must save session if he want
+                                 ;; because it's default behaviour for ring session
+              (assoc-in resp [:session :user] user)
+              (if-not (contains? resp :session) ;; if session is nil user want remove session
+                (assoc resp :session (merge (:session request) {:user user}))
+                resp))))))))
+
+
