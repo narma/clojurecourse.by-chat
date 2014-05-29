@@ -1,5 +1,5 @@
 (ns me.narma.auth.twitter
-  (:require [oauth.twitter :as tw]
+  (:require [oauth.twitter :as oauth-provider]
             [oauth.v1 :as oauth]
             [taoensso.timbre :as timbre :refer (log debug error)]
             [me.narma.config :refer [get-config]]
@@ -16,13 +16,13 @@
 (deftype TwitterBackend [request]
   UserAuthBackend
   (authenticate [_]
-     (let [request-token (tw/oauth-request-token
+     (let [request-token (oauth-provider/oauth-request-token
                           consumer-key
                           consumer-secret)
            ]
        (if (oauth/oauth-callback-confirmed? request-token)
          (let [oauth-token (:oauth-token request-token)
-               resp (redirect (tw/oauth-authentication-url oauth-token))]
+               resp (redirect (oauth-provider/oauth-authentication-url oauth-token))]
            (assoc-in resp [:session :oauth-token] oauth-token))
          {:status 401
           :body "Not confirmed"})))
@@ -35,7 +35,7 @@
                (assoc-in [:session :oauth-token] nil)
                {:status 401
                 :body "Token mismath"})
-           (let [access-token (tw/oauth-access-token
+           (let [access-token (oauth-provider/oauth-access-token
                                consumer-key
                                oauth_token
                                oauth_verifier)]
@@ -45,7 +45,7 @@
 
   (user-info [_]
      (let [{{access-token :token} :identity} request
-           client (tw/oauth-client
+           client (oauth-provider/oauth-client
                    consumer-key
                    consumer-secret
                    (:oauth-token access-token)

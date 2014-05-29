@@ -32,7 +32,7 @@
   "Wrap user if request is authenticated
   Insert to request :user info with cache it in session
   if auth backend doesn't exist do nothing"
-  ; TODO: use statefull session (use sandbar?)
+  ; may be use statefull session (use sandbar?)
   ; for avoid complexity of session save/restore
   (fn [request]
     (if-not (authenticated? request)
@@ -47,7 +47,8 @@
                                  ;; because it's default behaviour for ring session
               (assoc-in resp [:session :user] user)
               (if-not (contains? resp :session) ;; if session is nil user want remove session
-                (assoc resp :session (merge (:session request) {:user user}))
+                (assoc resp :session (merge (:session request) ;; save current session
+                                            {:user user}))
                 resp))))))))
 
 

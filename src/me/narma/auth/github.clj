@@ -1,5 +1,5 @@
 (ns me.narma.auth.github
-  (:require [oauth.github :as gh]
+  (:require [oauth.github :as oauth-provider]
             [oauth.v2 :as oauth]
             [taoensso.timbre :as timbre :refer (log debug error)]
             [me.narma.config :refer [get-config]]
@@ -11,13 +11,13 @@
 (def client-id (get-config :github :client-id))
 (def client-secret (get-config :github :client-secret))
 
-(def auth-url (gh/oauth-authorization-url client-id "https://narma.me/knock/github"))
+(def auth-url (oauth-provider/oauth-authorization-url client-id "https://narma.me/knock/github"))
 
 (deftype GithubBackend [request]
   UserAuthBackend
   (authenticate [_]
      (let [uuid (make-uuid)]
-       (-> (redirect (gh/oauth-authorization-url client-id
+       (-> (redirect (oauth-provider/oauth-authorization-url client-id
                                                  "https://narma.me/knock/github"
                                                  :state uuid))
            (assoc-in [:session :state] uuid))))
@@ -31,7 +31,7 @@
                (assoc-in [:session :state] nil)
                {:status 401
                 :body "State mismath"})
-           (let [access-token (gh/oauth-access-token
+           (let [access-token (oauth-provider/oauth-access-token
                                client-id
                                client-secret
                                code
@@ -42,7 +42,7 @@
 
   (user-info [_]
     (let [{{{access-token :access-token} :token} :identity} request
-          client (gh/oauth-client access-token)
+          client (oauth-provider/oauth-client access-token)
           info (client {:method :get
                            :url "https://api.github.com/user"})]
       info)))
