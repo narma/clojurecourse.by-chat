@@ -1,0 +1,95 @@
+/*
+	Prologue 1.2 by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+*/
+
+/*********************************************************************************/
+/* Basic                                                                         */
+/*********************************************************************************/
+
+	body,input,textarea,select
+	{
+		font-size: 16pt;
+	}
+
+	.container
+	{
+		padding: 0 2em 0 2em;
+	}
+
+	/* Lists */
+
+		ul.icons
+		{
+		}	
+		
+			ul.icons li
+			{
+			}
+
+			ul.icons li a
+			{
+				width: 1.75em;
+			}
+
+	/* Item */
+	
+		.item
+		{
+			margin-bottom: 20px;
+		}
+
+/*********************************************************************************/
+/* Header                                                                        */
+/*********************************************************************************/
+
+	#sidebar
+	{
+		/*width: 20%;*/
+    width: 220px;
+	}
+
+	.group
+	{
+	}
+	
+		.group .image
+		{
+			position: relative;
+			margin: 0 0 0.5em 0;
+		}
+
+    .group h1:before {
+      left: 100%;
+      margin-left: -1.25em;
+      line-height: 1em;
+    }
+
+	#nav
+	{
+	}
+	
+		#nav ul
+		{
+		}
+		
+			#nav ul li
+			{
+			}
+			
+				#nav ul li a
+				{					
+				}
+				
+					#nav ul li a span
+					{						
+					}
+					
+						#nav ul li a span:before
+						{
+							left: 100%;
+							margin-left: -1.25em;
+							line-height: 2.25em;
+						}
+
