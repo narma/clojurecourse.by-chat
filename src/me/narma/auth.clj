@@ -20,28 +20,47 @@
           :body "not found"})
   (user-info [_]))
 
+(deftype DemoBackend [request]
+  UserAuthBackend
+  (authenticate [_]
+                (-> (redirect "/")
+                    (assoc-in  [:session :identity] {:token true
+                                                :backend "demo"})))
+  (knock [_] true)
+  (user-info [_] (let [user-id (rand-int 1000)]
+                  {:name (str "Demo" user-id) :avatar-url "/public/images/ava.png" :id user-id})))
+
 (defn dispatch-backend [method request]
   (case method
     "twitter" (->TwitterBackend request)
     "github" (->GithubBackend request)
     "facebook" (->FacebookBackend request)
     "google" (->GoogleBackend request)
+    "demo" (->DemoBackend request)
     (->EmptyBackend request)))
 
-(defn wrap-user [handler]
+(defn wrap-user [handler & [{:keys [on-user on-user-first]}]]
   "Wrap user if request is authenticated
   Insert to request :user info with cache it in session
-  if auth backend doesn't exist do nothing"
+  if auth backend doesn't exist do nothing
+  Optional (on-user user req) callend if user found"
   ; may be use statefull session (use sandbar?)
   ; for avoid complexity of session save/restore
   (fn [request]
     (if-not (authenticated? request)
       (handler request)
       (if-let [user (get-in request [:session :user])]
-        (handler (assoc request :user user))
+        (do
+          (when on-user (on-user user request))
+          (handler (assoc request :user user))
+          )
         (let [method (get-in request [:session :identity :backend])
               auth-backend (dispatch-backend method request)
-              user (user-info auth-backend)]
+              user1 (user-info auth-backend)
+              opt-data (or (when on-user-first
+                         (on-user-first user1 request)) {})
+              user (merge user1 opt-data)
+              ]
           (let [resp (handler (assoc request :user user))]
             (if (:session resp)  ;; user code in handler must save session if he want
                                  ;; because it's default behaviour for ring session

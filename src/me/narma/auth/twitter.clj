@@ -52,8 +52,8 @@
                    (:oauth-token-secret access-token))
            tw-info (client {:method :get
                             :url "https://api.twitter.com/1.1/account/verify_credentials.json"})]
-       {:name (:screen-name tw-info)
+       (merge {:name (:screen-name tw-info)
         :avatar-url (clojure.string/replace
                      (:profile-image-url tw-info)
                      "http://"
-                     "https://")})))
+                     "https://")} tw-info))))

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<body>
+    <div id="header" class="skel-panels-fixed">
+      <div id="channel-header">
+        <div class="group">
+          <h1 class="fa fa-home group_name">Crazy Team</h1>
+        </div>
+        <h2 id="active-channel-name">
+          <span class="prefix">#</span>
+          <span id="active-channel-name-value">general</span>
+          <i class="fa fa-chevron-down"></i>
+        </h2>
+      </div>
+    </div>
+    <div id="footer" class="skel-panels-fixed">
+      <a onclick="return false;" id="primary-file-button" style="height: 41px;">
+        <i class="fa fa-arrow-circle-o-up"></i>
+      </a>
+      <div id="message-input-container">
+        <form id="message-form">
+          <textarea id="message-input" autocorrect="off" autocomplete="off" spellcheck="true"></textarea>
+        </form>
+      </div>
+    </div>
+
+		<!-- Sidebar -->
+			<div id="sidebar" class="skel-panels-fixed">
+                <div class="top">
+                    <div class="group">
+                      <h1 class="fa fa-home" class="group_name">Crazy Team</h1>
+                    </div>
+					<!-- Nav -->
+					<nav id="nav">
+                    <h2 id="channels-title">Channels<span class="fa fa-plus"></span></h2>
+				    <ul id="channel-list">
+					</ul>
+					</nav>
+				</div>
+
+				<div class="bottom">
+                    <img src="/public/images/avatar.jpg" id="user_avatar">
+                    <span id="user_name"></span>
+                    <img id="connection_icon" src="/public/images/online.png">
+                  <span id="connection_status">online</span>
+				</div>
+			</div>
+
+		<!-- Main -->
+			<div id="main">
+			   <div id="messages_container">
+          <div id="messages_wrap">
+            <div id="messages_rows">
+        </div>
+      </div>
+      </div>
+		</div>
+	</body>
+</html>
