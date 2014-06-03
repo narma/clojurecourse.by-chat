@@ -26,7 +26,10 @@
 
 (defn pooling []
   (GET "/messages/poll"
-       {:error-handler error-handler
+       {:error-handler (fn [{:keys [status status-text] :as args}]
+                         (if (= status 504)
+                           (pooling)
+                           (error-handler args)))
         :handler (fn [event]
                    (case (:type event)
                      "message"

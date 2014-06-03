@@ -68,8 +68,7 @@ null
                             (for [[msg prev] (zipmap @messages
                                                      (concat [nil] @messages))
                                   :let [full? (full-message? msg prev)]]
-                              (do (println "render " msg)
-                               (append (Message msg full?)))))
+                              (append (Message msg full?))))
    })
 
 (defn main [conn]
