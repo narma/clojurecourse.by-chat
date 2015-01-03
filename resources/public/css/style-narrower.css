@@ -134,3 +134,7 @@
 			border-radius: 0.35em;
 			margin: 0.25em;
 		}
+
+#main {
+  margin-left: 0;
+}

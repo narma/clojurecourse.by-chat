@@ -7,9 +7,11 @@ Implemented: chat, history
 TODO: channels, groups
 
 ## Usage 
-1. Go to https://narma.me
-2. Auth via one of social network or login with demo account
-3. Chat!
+```
+lein cljsbuild once
+lein run
+```
+
 
 ## License
 

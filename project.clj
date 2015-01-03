@@ -1,5 +1,6 @@
 (defproject narmame "0.1.0-SNAPSHOT"
-  :description "personal interests"
+  :description "clojurecourse.by final exam task:
+                simple chat powered by clojure/clojurescript"
   :url "https://narma.me"
   :license {:name "MIT"
             :url "http://opensource.org/licenses/MIT"}
