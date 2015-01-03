@@ -12,3 +12,8 @@ pom.xml.asc
 .lein-repl-history
 
 /logs
+/resources/public/js/out/
+/resources/public/js/out-min
+/resources/public/js/app.js
+/resources/public/js/app.min.js
+/resources/public/js/app.js.map
