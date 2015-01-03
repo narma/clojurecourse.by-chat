@@ -78,17 +78,16 @@
 
 
 (defn -main [& [port]] ;; entry point
-  ;(require '[lighttable.nrepl.handler :refer [lighttable-ops]])
-
+  (require '[lighttable.nrepl.handler :refer [lighttable-ops]])
   (timbre/set-config! [:appenders :spit :enabled?] true)
   (timbre/set-config! [:shared-appender-config :spit-filename] (log-filepath "narma.me.log"))
 
   (let [port  (if port (Integer/parseInt port) 8090)
-   ;     nrepl-server
-    ;     (nrepl/start-server :port 55415
-    ;                   :handler (nrepl/default-handler (ns-resolve *ns* (symbol "lighttable-ops"))))
+        nrepl-server
+         (nrepl/start-server :port 55415
+                       :handler (nrepl/default-handler (ns-resolve *ns* (symbol "lighttable-ops"))))
         ]
     (println (str "You can view the site at http://localhost:" port))
-    ;(.addShutdownHook (Runtime/getRuntime)
-    ;                  (Thread. #(nrepl/stop-server nrepl-server)))
+    (.addShutdownHook (Runtime/getRuntime)
+                      (Thread. #(nrepl/stop-server nrepl-server)))
     (run-server (get-handler) {:port port :queue-size 204800})))
