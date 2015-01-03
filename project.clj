@@ -66,7 +66,7 @@
                                          :externs ["react/externs/react.js"]
                                          :source-map "resources/public/js/app.min.js.map"}}}}
 
-  :jvm-opts    ["-Dfile.encoding=UTF-8 -Djava.awt.headless=true"]
+  :jvm-opts    ["-Djava.awt.headless=true"]
   :repl-options {
                  :port 3000
                  :nrepl-middleware [lighttable.nrepl.handler/lighttable-ops] }
